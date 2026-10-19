@@ -1,0 +1,16 @@
+# Backend / Java / Maven
+backend/target/
+backend/.idea/
+backend/*.iml
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# Frontend / Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vscode/
+
+# System
+.DS_Store
+Thumbs.db
