@@ -1,122 +1,73 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useEffect, useState } from 'react'
+import Login from './Login.jsx'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const CHEIE_TOKEN = 'chatapp.token'
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+// shortcut: tokenul sta in localStorage (citibil de orice script de pe pagina, deci expus la XSS);
+// pentru productie se muta intr-un cookie HttpOnly.
+function citesteToken() {
+  try { return localStorage.getItem(CHEIE_TOKEN) } catch { return null }
 }
 
-export default App
+function salveazaToken(token) {
+  try {
+    if (token) localStorage.setItem(CHEIE_TOKEN, token)
+    else localStorage.removeItem(CHEIE_TOKEN)
+  } catch { /* fara localStorage: tokenul ramane doar pana la refresh */ }
+}
+
+export default function App() {
+  const [token, setToken] = useState(citesteToken)
+  const [eu, setEu] = useState(null)
+  const [eroare, setEroare] = useState(null)
+
+  // Cu un token (nou sau din localStorage) aflam cine e logat; 401 = token expirat sau invalid
+  useEffect(() => {
+    if (!token) return
+    let anulat = false
+    fetch('/api/auth/eu', { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        if (res.status === 401) {
+          salveazaToken(null)
+          if (!anulat) setToken(null)
+          return null
+        }
+        if (!res.ok) throw new Error(res.status)
+        return res.json()
+      })
+      .then((date) => { if (date && !anulat) setEu(date) })
+      .catch(() => { if (!anulat) setEroare('Serverul nu răspunde. Backend-ul este pornit?') })
+    return () => { anulat = true }
+  }, [token])
+
+  function laLogin(tokenNou) {
+    salveazaToken(tokenNou)
+    setEroare(null)
+    setToken(tokenNou)
+  }
+
+  function iesire() {
+    salveazaToken(null)
+    setEu(null)
+    setToken(null)
+  }
+
+  if (!token) return <Login onLogin={laLogin} />
+
+  return (
+    <main className="card">
+      <h1>ChatApp</h1>
+      {eroare && <p className="eroare" role="alert">{eroare}</p>}
+      {!eu && !eroare && <p className="subtitlu">Se încarcă…</p>}
+      {eu && (
+        <>
+          <p className="subtitlu">Ești autentificat ca</p>
+          <p className="utilizator">{eu.email}</p>
+          <p className="rol">{eu.roluri.join(', ')}</p>
+        </>
+      )}
+      <button type="button" onClick={iesire}>Ieșire</button>
+    </main>
+  )
+}

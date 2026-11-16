@@ -40,6 +40,7 @@ class SecurityTest {
         mvc.perform(get("/api/auth/eu").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("admin@chatapp.ro"))
+                .andExpect(jsonPath("$.roluri.length()").value(1)) // doar rolul, fara FACTOR_PASSWORD
                 .andExpect(jsonPath("$.roluri[0]").value("ADMIN"));
     }
 

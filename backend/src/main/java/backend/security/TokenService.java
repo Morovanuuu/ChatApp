@@ -30,6 +30,7 @@ public class TokenService {
         Instant acum = Instant.now();
         List<String> roluri = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)     // ROLE_ADMIN
+                .filter(a -> a.startsWith("ROLE_"))      // Spring Security 7 adauga si FACTOR_PASSWORD, care nu e rol
                 .map(a -> a.replaceFirst("^ROLE_", "")) // ADMIN
                 .toList();
         JwtClaimsSet claims = JwtClaimsSet.builder()
