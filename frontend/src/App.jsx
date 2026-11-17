@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Login from './Login.jsx'
+import Chat from './Chat.jsx'
 import './App.css'
 
 const CHEIE_TOKEN = 'chatapp.token'
@@ -54,19 +55,13 @@ export default function App() {
   }
 
   if (!token) return <Login onLogin={laLogin} />
+  if (eu) return <Chat token={token} eu={eu} onIesire={iesire} />
 
   return (
     <main className="card">
       <h1>ChatApp</h1>
       {eroare && <p className="eroare" role="alert">{eroare}</p>}
-      {!eu && !eroare && <p className="subtitlu">Se încarcă…</p>}
-      {eu && (
-        <>
-          <p className="subtitlu">Ești autentificat ca</p>
-          <p className="utilizator">{eu.email}</p>
-          <p className="rol">{eu.roluri.join(', ')}</p>
-        </>
-      )}
+      {!eroare && <p className="subtitlu">Se încarcă…</p>}
       <button type="button" onClick={iesire}>Ieșire</button>
     </main>
   )

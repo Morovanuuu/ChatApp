@@ -1,0 +1,378 @@
+/* Ecranul de chat; culorile vin din index.css, deci tema intunecata merge automat */
+.chat {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--page-bg);
+  text-align: left;
+}
+
+.chat button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.chat button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.buton-principal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.buton-secundar {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 15px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.info {
+  align-self: center;
+  padding: 10px 16px;
+  font-size: 15px;
+}
+
+/* Antet */
+.chat-antet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 24px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.chat-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+}
+
+.chat-logo h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.chat-eu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  word-break: break-all;
+}
+
+.chat-eroare {
+  margin: 0;
+  border-radius: 0;
+  text-align: center;
+}
+
+/* Lista (stanga) si panoul (dreapta); pe telefon se aseaza una sub alta */
+.chat-corp {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+
+.chat-lista {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+}
+
+.chat-lista-titlu {
+  margin: 16px 10px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.conv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.conv:hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.conv[aria-current] {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.avatar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent) 22%, var(--bg));
+  color: var(--text-h);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.conv-text,
+.panou-titlu {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.conv-titlu {
+  font-weight: 600;
+  color: var(--text-h);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conv-sub {
+  font-size: 13px;
+}
+
+.chat-panou {
+  flex: 999 1 560px;
+  min-width: 0;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gol {
+  margin: auto;
+}
+
+/* Conversatia deschisa */
+.panou-antet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.panou-antet h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.panou-detalii {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* column-reverse: scroll-ul ramane jos cand vin mesaje noi */
+.mesaje {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 20px 24px;
+}
+
+.mesaje ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.zi {
+  align-self: center;
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: var(--border);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mesaj {
+  align-self: flex-start;
+  max-width: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mesaj.al-meu {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.mesaj-autor {
+  margin: 0 14px 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.bula {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px 18px 18px 4px;
+  background: var(--bg);
+  color: var(--text-h);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.al-meu .bula {
+  border-color: var(--accent);
+  border-radius: 18px 18px 4px 18px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.mesaj-ora {
+  margin: 2px 14px 0;
+  font-size: 12px;
+}
+
+.compune {
+  display: flex;
+  gap: 12px;
+  padding: 14px 24px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.compune input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--page-bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.compune .buton-principal {
+  border-radius: 22px;
+  padding: 0 20px;
+}
+
+/* Conversatie noua */
+.formular-nou-loc {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 24px;
+}
+
+.formular-nou {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  box-sizing: border-box;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.formular-nou h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.formular-nou p {
+  font-size: 15px;
+}
+
+.formular-nou label {
+  margin: 12px 0 4px;
+  font-size: 15px;
+  color: var(--text-h);
+}
+
+.formular-nou input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.ajutor {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.formular-actiuni {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}

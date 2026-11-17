@@ -14,19 +14,20 @@
   margin-bottom: 24px;
 }
 
-form {
+/* Formularul de login; chatul are stilurile lui in Chat.css */
+.card form {
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
-label {
+.card label {
   margin: 12px 0 4px;
   font-size: 15px;
   color: var(--text-h);
 }
 
-input {
+.card input {
   font: inherit;
   padding: 10px 12px;
   border: 1px solid var(--border);
@@ -41,7 +42,7 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-button {
+.card button {
   font: inherit;
   margin-top: 24px;
   padding: 10px 16px;
@@ -52,7 +53,7 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
+.card button:disabled {
   opacity: 0.6;
   cursor: wait;
 }
@@ -64,16 +65,4 @@ button:disabled {
   background: rgba(220, 38, 38, 0.1);
   color: #dc2626;
   font-size: 15px;
-}
-
-.utilizator {
-  font-size: 20px;
-  color: var(--text-h);
-  word-break: break-all;
-}
-
-.rol {
-  margin-top: 4px;
-  font-family: var(--mono);
-  font-size: 14px;
 }
