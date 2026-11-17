@@ -73,6 +73,14 @@ class SecurityTest {
     }
 
     @Test
+    void specificatiaOpenApiEstePublicaSiCereBearer() throws Exception {
+        mvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paths['/api/auth/login']").exists())
+                .andExpect(jsonPath("$.components.securitySchemes.bearer.scheme").value("bearer"));
+    }
+
+    @Test
     void tokenModificatEsteRespins() throws Exception {
         // Ca in Lab 4, exp. 8.3: schimbam USER in ADMIN in payload si pastram semnatura veche
         String[] parti = token("ana@chatapp.ro", "ana12345").split("\\.");
